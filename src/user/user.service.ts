@@ -3,6 +3,7 @@ import { PrismaService } from 'prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
+import logger from '../logger.js';
 @Injectable()
 export class UserService {
     constructor(private prisma: PrismaService,  @Inject(CACHE_MANAGER) private cacheManager: Cache){}
@@ -55,6 +56,7 @@ export class UserService {
         });
 
         await this.invalidateBooksCache();
+        logger.info(`User ${user.username} updated`);
         return updateduser;
 
     }
@@ -71,6 +73,7 @@ export class UserService {
         });
 
         await this.invalidateBooksCache();
+        logger.info(`User ${user.username} deleted`);
         return deletedBook;
 
     }
